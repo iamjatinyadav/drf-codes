@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Student
-
+from django.contrib.auth.models import User
 # with serializers
 # class StudentSerializers(serializers.Serializer):
 #     id  = serializers.IntegerField(read_only=True)
@@ -23,7 +23,14 @@ from .models import Student
 
 
 # with model serializer
-class StudentSerializers(serializers.ModelSerializer):
+class StudentSerializers(serializers.HyperlinkedModelSerializer):
+    owner = serializers.ReadOnlyField(source='owner.username')
     class Meta:
         model = Student
-        fields = ['id', 'name', 'age', 'city']
+        fields = ['url','id', 'name', 'age', 'city', 'owner']
+
+class UserSerializers(serializers.HyperlinkedModelSerializer):
+    students = serializers.HyperlinkedRelatedField(many=True, view_name='student-detail', read_only=True)
+    class Meta:
+        model = User
+        fields  = ['url','id', 'username','students']

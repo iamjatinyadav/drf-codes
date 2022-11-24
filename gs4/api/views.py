@@ -2,12 +2,16 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import Student
-from .serializers import StudentSerializers
+from .serializers import StudentSerializers, UserSerializers
 from rest_framework import status
 from rest_framework.views import APIView
 from django.http import Http404
 from rest_framework import mixins
 from rest_framework import generics
+from django.contrib.auth.models import User
+from rest_framework import permissions
+from .permissions import IsOwnerOrReadOnly
+from rest_framework.reverse import reverse 
 # Create your views here.
 
 # @api_view(['GET', 'POST'])
@@ -57,11 +61,24 @@ from rest_framework import generics
 #         return self.create(request, *args, **kwargs)
 
 
+@api_view(['GET'])
+def api_root(request, format=None):
+    return Response({
+        'users': reverse('user-list', request=request, format=format),
+        'student': reverse('student-list', request=request, format=format),
+    })
+
+
 # using genrics views
 
 class StudentView(generics.ListCreateAPIView):
     queryset  = Student.objects.all()
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     serializer_class = StudentSerializers
+
+
+    def perform_create(self, serializer):
+        serializer.save(owner = self.request.user)
 
 
 # @api_view(['PUT', 'GET', 'DELETE'])
@@ -134,7 +151,17 @@ class StudentView(generics.ListCreateAPIView):
 
 class StudentDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Student.objects.all()
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
     serializer_class  = StudentSerializers
+
+class UserListView(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class  = UserSerializers
+
+class UserDetailView(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializers
+
 
 
 
