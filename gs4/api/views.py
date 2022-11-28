@@ -12,6 +12,7 @@ from django.contrib.auth.models import User
 from rest_framework import permissions
 from .permissions import IsOwnerOrReadOnly
 from rest_framework.reverse import reverse 
+from rest_framework import viewsets
 # Create your views here.
 
 # @api_view(['GET', 'POST'])
@@ -69,16 +70,19 @@ def api_root(request, format=None):
     })
 
 
+
+
+
 # using genrics views
 
-class StudentView(generics.ListCreateAPIView):
-    queryset  = Student.objects.all()
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    serializer_class = StudentSerializers
+# class StudentView(generics.ListCreateAPIView):
+#     queryset  = Student.objects.all()
+#     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+#     serializer_class = StudentSerializers
 
 
-    def perform_create(self, serializer):
-        serializer.save(owner = self.request.user)
+#     def perform_create(self, serializer):
+#         serializer.save(owner = self.request.user)
 
 
 # @api_view(['PUT', 'GET', 'DELETE'])
@@ -149,19 +153,34 @@ class StudentView(generics.ListCreateAPIView):
 #         return self.destroy(request, *args, **kwargs)
 
 
-class StudentDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Student.objects.all()
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
-    serializer_class  = StudentSerializers
 
-class UserListView(generics.ListAPIView):
-    queryset = User.objects.all()
-    serializer_class  = UserSerializers
+# class StudentDetail(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = Student.objects.all()
+#     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+#     serializer_class  = StudentSerializers
 
-class UserDetailView(generics.RetrieveAPIView):
+# class UserListView(generics.ListAPIView):
+#     queryset = User.objects.all()
+#     serializer_class  = UserSerializers
+
+# class UserDetailView(generics.RetrieveAPIView):
+#     queryset = User.objects.all()
+#     serializer_class = UserSerializers
+
+# using viewSets in DRF
+
+class StudentViewSet(viewsets.ModelViewSet):
+        queryset = Student.objects.all()
+        permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+        serializer_class  = StudentSerializers
+
+        def perform_create(self, serializer):
+            serializer.save(owner=self.request.user)
+
+class UserViewSet(viewsets.ReadOnlyModelViewSet): 
+
     queryset = User.objects.all()
     serializer_class = UserSerializers
-
 
 
 
