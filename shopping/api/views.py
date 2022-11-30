@@ -20,17 +20,26 @@ class ProductListView(viewsets.ModelViewSet):
         serializer = ProductsSerializers(recent_post, many=True, context={'request': request})
         return Response(serializer.data)
 
+    @action(detail=False, methods=["GET"], url_path="cheap-product")
+    def cheap_product(self,request):
+        post = Product.objects.order_by('discount_price')[:6]
+        serializer = ProductsSerializers(post, many=True, context = {'request': request})
+        return Response(serializer.data)
 
 
-class ProductRecentView(generics.ListAPIView):
-    queryset = Product.objects.order_by('-id')[:4]
-    serializer_class = ProductsSerializers
+
+# class ProductRecentView(generics.ListAPIView):
+#     queryset = Product.objects.order_by('-id')[:4]
+#     serializer_class = ProductsSerializers
 
 
-class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Product.objects.all()
-    serializer_class = ProductsSerializers
+# class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = Product.objects.all()
+#     serializer_class = ProductsSerializers
 
-class CategoryListView(generics.ListCreateAPIView):
+class CategoryListView(viewsets.ReadOnlyModelViewSet):
     queryset = ProductCategorys.objects.all()
     serializer_class = CategorySerializers
+
+
+
