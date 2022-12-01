@@ -9,10 +9,26 @@ from rest_framework.views import APIView
 from rest_framework.status import *
 # Create your views here.
 
-class ProductListView(viewsets.ModelViewSet):
+class ProductListView(viewsets.ReadOnlyModelViewSet):
 
     queryset = Product.objects.all()
-    serializer_class = ProductsSerializers
+    serializer_class = ReadProductsSerializers
+
+    # def get_queryset(self):
+    #     return self.queryset
+
+    # def get_object(self, pk=None):
+    #     ids = self.kwargs['pk']
+    #     print(ids)
+    #     return self.get_queryset().filter(name=ids) 
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializers = ProductsSerializers(instance, context={'request':request})
+        # print(serializers.data['category'])
+        return Response(serializers.data)
+    
+
 
     @action(detail=False, methods=["GET",], url_path="recent-product")
     def recent_product(self, request):
@@ -38,12 +54,10 @@ class ProductListView(viewsets.ModelViewSet):
             return Response(status=HTTP_404_NOT_FOUND)
 
 
-
     @action(detail=False, methods=["GET"], url_path="recent-product/(?P<pk>\d+)")
     def recent_product_detail(self,request, pk=None):
         id = int(self.kwargs['pk'])
         post = list(Product.objects.order_by('-id')[:6].values_list("id", flat=True))
-        print(post)
         if id in post:
             post = Product.objects.get(pk=id)
             serializer = ProductsSerializers(post, context = {'request': request})
@@ -68,5 +82,8 @@ class CategoryListView(viewsets.ReadOnlyModelViewSet):
     queryset = ProductCategorys.objects.all()
     serializer_class = CategorySerializers
 
+
+# class ProductList(viewsets.ReadOnlyModelViewSet):
+#     queryset = 
 
 

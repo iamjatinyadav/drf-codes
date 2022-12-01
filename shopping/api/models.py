@@ -34,4 +34,4 @@ class Product(TimeStampedModel):
         verbose_name_plural = 'Products'
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.id)

@@ -12,4 +12,9 @@ class CategorysAdmin(admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'discount_price', 'slug', 'category']
+    list_display = ['id', 'name', 'discount_price', 'slug', 'view_category']
+
+    def view_category(self, obj):
+        return obj.category.slug
+
+
