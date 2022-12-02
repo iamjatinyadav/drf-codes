@@ -8,6 +8,8 @@ from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.status import *
 from rest_framework import filters
+from api.filters import PriceFilter
+from django_filters.rest_framework import DjangoFilterBackend
 
 # Create your views here.
 
@@ -15,8 +17,13 @@ class ProductListView(viewsets.ReadOnlyModelViewSet):
 
     queryset = Product.objects.all()
     serializer_class = ReadProductsSerializers
-    filter_backends = [filters.SearchFilter]
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend, filters.OrderingFilter]
+    filterset_class = PriceFilter
     search_fields = ['name']
+    filterset_fields = ['discount_price']
+
+    ordering_fields = ('discount_price',)
+
 
 
     # def get_queryset(self):
