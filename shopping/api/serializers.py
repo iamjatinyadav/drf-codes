@@ -2,10 +2,15 @@ from rest_framework import serializers
 from .models import *
 
 class ReadProductsSerializers(serializers.ModelSerializer):
-
+    # product_count = serializers.SerializerMethodField()
+    
     class Meta:
         model = Product
         fields = "__all__"
+        # fields = ('id','name','original_price','discount_price','image', 'slug', 'category', 'product_count', 'related_products')
+
+    def get_product_count(self, obj):
+        return obj.products.count()
 
 class CategorySerializers(serializers.ModelSerializer):
     product_count = serializers.SerializerMethodField()
@@ -36,8 +41,4 @@ class ProductsSerializers(serializers.ModelSerializer):
         return obj.category.name
 
 
-
-
-
-        # return CategorySerializers(data, many=True).data
         

@@ -7,12 +7,17 @@ from rest_framework.decorators import action
 from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.status import *
+from rest_framework import filters
+
 # Create your views here.
 
 class ProductListView(viewsets.ReadOnlyModelViewSet):
 
     queryset = Product.objects.all()
     serializer_class = ReadProductsSerializers
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['name']
+
 
     # def get_queryset(self):
     #     return self.queryset
@@ -33,13 +38,13 @@ class ProductListView(viewsets.ReadOnlyModelViewSet):
     @action(detail=False, methods=["GET",], url_path="recent-product")
     def recent_product(self, request):
         recent_post = Product.objects.order_by('-id')[:5]
-        serializer = ProductsSerializers(recent_post, many=True, context={'request': request})
+        serializer = ReadProductsSerializers(recent_post, many=True, context={'request': request})
         return Response(serializer.data)
 
     @action(detail=False, methods=["GET"], url_path="cheap-product")
     def cheap_product(self,request):
         post = Product.objects.order_by('discount_price')[:6]
-        serializer = ProductsSerializers(post, many=True, context = {'request': request})
+        serializer = ReadProductsSerializers(post, many=True, context = {'request': request})
         return Response(serializer.data)
     
     @action(detail=False, methods=["GET"], url_path="cheap-product/(?P<pk>\d+)")
