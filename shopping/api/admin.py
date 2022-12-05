@@ -27,3 +27,8 @@ class ContactAdmin(admin.ModelAdmin):
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
     list_display= ['id', 'name', 'email', 'rating', 'product', 'created']
+
+
+@admin.register(Newsletter)
+class Newsletter(admin.ModelAdmin):
+    list_display = ['id', 'email']

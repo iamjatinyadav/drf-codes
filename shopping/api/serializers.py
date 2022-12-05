@@ -69,3 +69,9 @@ class ReviewShowSerializers(serializers.ModelSerializer):
     class Meta:
         model = Review
         fields = ('name', 'review', 'rating', 'created')
+
+
+class NewsLetterSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = Newsletter
+        fields = ('id', 'email')

@@ -74,3 +74,16 @@ class Review(TimeStampedModel):
 
     def __str__(self) -> str:
         return self.name
+
+
+class Newsletter(TimeStampedModel):
+    email = models.EmailField(max_length=40, unique=True, error_messages= {"unique":"this email already register with newsletter"})
+
+    class Meta:
+        db_table = 'Newsletter'
+        managed = True
+        verbose_name = 'Newsletter'
+        verbose_name_plural = 'Newsletters'
+
+    def __str__(self) -> str:
+        return self.email

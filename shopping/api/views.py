@@ -119,3 +119,6 @@ class ReviewViewSet(ReviewListPostViewSet):
         return Response(serializer.data)
 
 
+class NewsletterViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
+    queryset = Newsletter.objects.all()
+    serializer_class = NewsLetterSerializers

@@ -8,6 +8,7 @@ router.register("product", ProductListView)
 router.register('category', CategoryListView)
 router.register('contact', ContactPostView)
 router.register('review', ReviewViewSet)
+router.register('newsletter', NewsletterViewSet)
 urlpatterns = [
     # path('product/', ProductListView.as_view()),
     # path('recent/', ProductRecentView.as_view()),
