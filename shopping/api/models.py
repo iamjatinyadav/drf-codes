@@ -35,3 +35,21 @@ class Product(TimeStampedModel):
 
     def __str__(self) -> str:
         return str(self.id)
+
+
+class Contact(TimeStampedModel):
+    name = models.CharField(max_length=100)
+    email = models.EmailField(max_length=40)
+    subject = models.CharField(max_length=255)
+    message = models.TextField()
+
+
+    class Meta:
+        db_table = 'Contacts'
+        managed = True
+        verbose_name = 'Contact'
+        verbose_name_plural = 'Contacts'
+
+
+    def __str__(self) -> str:
+        return self.name

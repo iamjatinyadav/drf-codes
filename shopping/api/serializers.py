@@ -41,4 +41,7 @@ class ProductsSerializers(serializers.ModelSerializer):
         return obj.category.name
 
 
-        
+class ContactSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = Contact
+        fields = ('id', 'name', 'email', 'subject', 'message')

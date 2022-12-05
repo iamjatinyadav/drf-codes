@@ -18,3 +18,6 @@ class ProductAdmin(admin.ModelAdmin):
         return obj.category.slug
 
 
+@admin.register(Contact)
+class ContactAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name', 'email', 'subject', 'message']

@@ -10,6 +10,7 @@ from rest_framework.status import *
 from rest_framework import filters
 from api.filters import PriceFilter
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.permissions import IsAuthenticated
 
 # Create your views here.
 
@@ -94,8 +95,13 @@ class CategoryListView(viewsets.ReadOnlyModelViewSet):
     queryset = ProductCategorys.objects.all()
     serializer_class = CategorySerializers
 
+class ContactPostViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
+    pass
 
-# class ProductList(viewsets.ReadOnlyModelViewSet):
-#     queryset = 
+class ContactPostView(ContactPostViewSet):
+    queryset = Contact.objects.all()
+    serializer_class = ContactSerializers
+    permission_classes = [IsAuthenticated]
+
 
 
