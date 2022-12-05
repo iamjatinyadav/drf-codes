@@ -9,7 +9,3 @@ class PriceFilter(FilterSet):
         model = Product
         fields = ['discount_price']
 
-
-def fil(DjangoFilterBackend):
-
-    pass
