@@ -21,3 +21,9 @@ class ProductAdmin(admin.ModelAdmin):
 @admin.register(Contact)
 class ContactAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'email', 'subject', 'message']
+
+
+
+@admin.register(Review)
+class ReviewAdmin(admin.ModelAdmin):
+    list_display= ['id', 'name', 'email', 'rating', 'product', 'created']

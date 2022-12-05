@@ -104,4 +104,18 @@ class ContactPostView(ContactPostViewSet):
     permission_classes = [IsAuthenticated]
 
 
+class ReviewListPostViewSet(generics.ListCreateAPIView, viewsets.GenericViewSet):
+    pass
+
+
+class ReviewViewSet(ReviewListPostViewSet):
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializers
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
 

@@ -1,5 +1,7 @@
 from django.db import models
 from django_extensions.db.models import TimeStampedModel, AutoSlugField
+from django.core.validators import MinValueValidator, MaxValueValidator
+
 # Create your models here.
 
 class ProductCategorys(models.Model):
@@ -50,6 +52,22 @@ class Contact(TimeStampedModel):
         verbose_name = 'Contact'
         verbose_name_plural = 'Contacts'
 
+
+    def __str__(self) -> str:
+        return self.name
+
+class Review(TimeStampedModel):
+    product = models.ForeignKey('Product', on_delete=models.CASCADE, related_name='reviews')
+    name = models.CharField(max_length=100)
+    email = models.EmailField(max_length=100)
+    review = models.TextField()
+    rating = models.IntegerField(validators=[MinValueValidator(1),MaxValueValidator(5)],help_text="please enter value in  1 to 5 ", default=1)
+
+    class Meta:
+        db_table = 'reviews'
+        managed = True
+        verbose_name = 'Review'
+        verbose_name_plural = 'Reviews'
 
     def __str__(self) -> str:
         return self.name
