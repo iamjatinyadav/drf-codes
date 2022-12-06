@@ -87,3 +87,16 @@ class Newsletter(TimeStampedModel):
 
     def __str__(self) -> str:
         return self.email
+
+
+class WishList(TimeStampedModel):
+    product = models.ForeignKey('Product', on_delete=models.CASCADE, related_name="wishlist")
+
+    class Meta:
+        db_table = 'Wishlists'
+        managed = True
+        verbose_name = 'Wishlist'
+        verbose_name_plural = 'Wishlists'
+
+    def __str__(self) -> str:
+        return self.product.name
