@@ -140,5 +140,6 @@ class WishlistViewSet(generics.ListCreateAPIView, viewsets.GenericViewSet):
         else:
             return Response(status=HTTP_404_NOT_FOUND)
 
+
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)

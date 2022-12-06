@@ -83,6 +83,9 @@ class WishlistSerializers(serializers.ModelSerializer):
         model = WishList
         fields = ('id', 'user', 'product')
 
+    # def validate(self,attrs):
+    #     pass
+
 
 class WishlistReadSerializers(serializers.ModelSerializer):
     # product = ReadProductsSerializers(read_only=True, many=True)
