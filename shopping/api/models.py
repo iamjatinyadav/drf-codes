@@ -1,7 +1,7 @@
 from django.db import models
 from django_extensions.db.models import TimeStampedModel, AutoSlugField
 from django.core.validators import MinValueValidator, MaxValueValidator
-
+from django.contrib.auth.models import User
 # Create your models here.
 
 class ProductCategorys(models.Model):
@@ -90,7 +90,8 @@ class Newsletter(TimeStampedModel):
 
 
 class WishList(TimeStampedModel):
-    product = models.ForeignKey('Product', on_delete=models.CASCADE, related_name="wishlist")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_wishlist")
+    product = models.ForeignKey('Product', on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'Wishlists'
