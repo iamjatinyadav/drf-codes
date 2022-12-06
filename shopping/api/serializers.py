@@ -82,3 +82,14 @@ class WishlistSerializers(serializers.ModelSerializer):
     class Meta:
         model = WishList
         fields = ('id', 'user', 'product')
+
+
+class WishlistReadSerializers(serializers.ModelSerializer):
+    # product = ReadProductsSerializers(read_only=True, many=True)
+    class Meta:
+        model = WishList
+        fields = ('id', 'product')
+        depth = 1
+
+
+

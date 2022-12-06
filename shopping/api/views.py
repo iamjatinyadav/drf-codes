@@ -135,7 +135,7 @@ class WishlistViewSet(generics.ListCreateAPIView, viewsets.GenericViewSet):
         username = self.request.user
         queryset=queryset.filter(user__username = username)
         if queryset:
-            serializer = self.get_serializer(queryset, many=True)
+            serializer = WishlistReadSerializers(queryset, many=True)
             return Response(serializer.data)
         else:
             return Response(status=HTTP_404_NOT_FOUND)
