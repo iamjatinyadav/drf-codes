@@ -75,3 +75,10 @@ class NewsLetterSerializers(serializers.ModelSerializer):
     class Meta:
         model = Newsletter
         fields = ('id', 'email')
+
+
+class WishlistSerializers(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(read_only=True)
+    class Meta:
+        model = WishList
+        fields = ('id', 'user', 'product')

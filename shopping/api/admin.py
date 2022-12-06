@@ -32,3 +32,8 @@ class ReviewAdmin(admin.ModelAdmin):
 @admin.register(Newsletter)
 class Newsletter(admin.ModelAdmin):
     list_display = ['id', 'email']
+
+
+@admin.register(WishList)
+class Newsletter(admin.ModelAdmin):
+    list_display = ['id', 'user', 'product']

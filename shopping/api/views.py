@@ -122,3 +122,23 @@ class ReviewViewSet(ReviewListPostViewSet):
 class NewsletterViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     queryset = Newsletter.objects.all()
     serializer_class = NewsLetterSerializers
+
+class WishlistViewSet(generics.ListCreateAPIView, viewsets.GenericViewSet):
+    queryset = WishList.objects.all()
+    serializer_class = WishlistSerializers
+    permission_classes = [IsAuthenticated]
+    pagination_class = None
+
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        username = self.request.user
+        queryset=queryset.filter(user__username = username)
+        if queryset:
+            serializer = self.get_serializer(queryset, many=True)
+            return Response(serializer.data)
+        else:
+            return Response(status=HTTP_404_NOT_FOUND)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
