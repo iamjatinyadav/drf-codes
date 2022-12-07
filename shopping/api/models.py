@@ -101,3 +101,40 @@ class WishList(TimeStampedModel):
 
     def __str__(self) -> str:
         return self.product.name
+
+
+class Cart(TimeStampedModel):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='usercart')
+    is_paid = models.BooleanField(default=False)
+
+    class Meta:
+        db_table = 'Carts'
+        managed = True
+        verbose_name = 'Cart'
+        verbose_name_plural = 'Carts'
+
+    def __str__(self) -> str:
+        return self.user.username
+
+
+class CartItems(TimeStampedModel):
+    cart = models.ForeignKey('Cart', on_delete=models.CASCADE, related_name='cartitems')
+    product = models.ForeignKey('Product', on_delete=models.SET_NULL, null=True, blank=True, related_name='cartproducts')
+    count = models.IntegerField()
+    total_price = models.FloatField(max_length=255, null=True, blank=True)
+
+    class Meta:
+        db_table = 'Cartitem'
+        managed = True
+        verbose_name = 'Cartitem'
+        verbose_name_plural = 'Cartitems'
+
+
+    def __str__(self) -> str:
+        return self.product.name 
+
+
+    def save(self, *args, **kwargs):
+
+        self.total_price = self.count * self.product.discount_price
+        super(CartItems, self).save(*args, **kwargs)

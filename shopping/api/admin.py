@@ -35,5 +35,14 @@ class Newsletter(admin.ModelAdmin):
 
 
 @admin.register(WishList)
-class Newsletter(admin.ModelAdmin):
+class WishListAdmin(admin.ModelAdmin):
     list_display = ['id', 'user', 'product']
+
+
+@admin.register(Cart)
+class CartAdmin(admin.ModelAdmin):
+    list_display = ['id', 'user']
+
+@admin.register(CartItems)
+class CartItemAdmin(admin.ModelAdmin):
+    list_display = ['id', 'cart', 'product', 'count', 'total_price']
