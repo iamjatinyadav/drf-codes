@@ -78,17 +78,21 @@ class NewsLetterSerializers(serializers.ModelSerializer):
 
 
 class WishlistSerializers(serializers.ModelSerializer):
-    user = serializers.PrimaryKeyRelatedField(read_only=True)
+    # user = serializers.PrimaryKeyRelatedField(read_only=True)
     class Meta:
         model = WishList
-        fields = ('id', 'user', 'product')
+        fields = ('id', 'product')
 
-    # def validate(self,attrs):
-    #     pass
+    def validate(self,attrs):
+            # print(attrs['user'])
+            # print(type(attrs['user']))
+            log_user_id = self.context['request'].user.id
+            if WishList.objects.filter(user_id = log_user_id) and WishList.objects.filter(product= attrs['product']):
+                raise serializers.ValidationError({'product': "Product already in your wishlist"})
+            return attrs
 
 
 class WishlistReadSerializers(serializers.ModelSerializer):
-    # product = ReadProductsSerializers(read_only=True, many=True)
     class Meta:
         model = WishList
         fields = ('id', 'product')
