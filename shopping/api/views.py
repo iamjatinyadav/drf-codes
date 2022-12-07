@@ -143,3 +143,10 @@ class WishlistViewSet(generics.ListCreateAPIView, viewsets.GenericViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+
+class CartViewSets(viewsets.ModelViewSet):
+    queryset = CartItems.objects.all()
+    serializer_class = CartItemsSerializers
+    permission_classes = [IsAuthenticated]
+    

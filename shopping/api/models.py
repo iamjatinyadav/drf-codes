@@ -2,6 +2,8 @@ from django.db import models
 from django_extensions.db.models import TimeStampedModel, AutoSlugField
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import User
+from django.db.models import Sum
+
 # Create your models here.
 
 class ProductCategorys(models.Model):
@@ -115,6 +117,25 @@ class Cart(TimeStampedModel):
 
     def __str__(self) -> str:
         return self.user.username
+
+    @property
+    def cart_items_count(self):
+        total = 0
+        for counts in self.cartitems.all():
+            total += counts.count
+        return total
+
+
+    @staticmethod
+    def total_value(self, request, obj):
+        total = obj.cartitems.all().aggregate(Sum('total_price'))
+        if total == "None":
+            total =0
+        return total
+
+
+    def all_items(self):
+        return self.cartitems.all()
 
 
 class CartItems(TimeStampedModel):

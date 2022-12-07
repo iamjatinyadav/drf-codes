@@ -17,6 +17,7 @@ router.register('contact', ContactPostView)
 router.register('review', ReviewViewSet)
 router.register('newsletter', NewsletterViewSet)
 router.register('wishlist', WishlistViewSet)
+router.register('cart', CartViewSets)
 urlpatterns = [
     # path('product/', ProductListView.as_view()),
     # path('recent/', ProductRecentView.as_view()),
