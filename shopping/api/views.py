@@ -164,8 +164,7 @@ class CartViewSets(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        product=serializer.validated_data['product']
-        cartitem = CartItems.objects.filter(product = product)
+        cartitem = CartItems.objects.filter(product = serializer.validated_data['product'])
         if cartitem:
             for i in cartitem:
                 i.count += serializer.validated_data['count']
