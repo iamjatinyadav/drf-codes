@@ -27,15 +27,6 @@ class ProductListView(viewsets.ReadOnlyModelViewSet):
     ordering_fields = ('discount_price',)
 
 
-
-    # def get_queryset(self):
-    #     return self.queryset
-
-    # def get_object(self, pk=None):
-    #     ids = self.kwargs['pk']
-    #     print(ids)
-    #     return self.get_queryset().filter(name=ids) 
-
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         serializers = ProductsSerializers(instance, context={'request':request})
@@ -43,12 +34,12 @@ class ProductListView(viewsets.ReadOnlyModelViewSet):
         return Response(serializers.data)
     
 
-
     @action(detail=False, methods=["GET",], url_path="recent-product")
     def recent_product(self, request):
         recent_post = Product.objects.order_by('-id')[:5]
         serializer = ReadProductsSerializers(recent_post, many=True, context={'request': request})
         return Response(serializer.data)
+
 
     @action(detail=False, methods=["GET"], url_path="cheap-product")
     def cheap_product(self,request):
@@ -56,6 +47,7 @@ class ProductListView(viewsets.ReadOnlyModelViewSet):
         serializer = ReadProductsSerializers(post, many=True, context = {'request': request})
         return Response(serializer.data)
     
+
     @action(detail=False, methods=["GET"], url_path="cheap-product/(?P<pk>\d+)")
     def cheap_product_detail(self,request, pk=None):
         id = int(self.kwargs['pk'])
@@ -80,17 +72,6 @@ class ProductListView(viewsets.ReadOnlyModelViewSet):
             return Response(status=HTTP_404_NOT_FOUND)
     
 
-
-
-
-# class ProductRecentView(generics.ListAPIView):
-#     queryset = Product.objects.order_by('-id')[:4]
-#     serializer_class = ProductsSerializers
-
-
-# class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
-#     queryset = Product.objects.all()
-#     serializer_class = ProductsSerializers
 
 class CategoryListView(viewsets.ReadOnlyModelViewSet):
     queryset = ProductCategorys.objects.all()

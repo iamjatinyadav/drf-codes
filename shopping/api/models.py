@@ -126,16 +126,20 @@ class Cart(TimeStampedModel):
         return total
 
 
-    @staticmethod
-    def total_value(self, request, obj):
-        total = obj.cartitems.all().aggregate(Sum('total_price'))
-        if total == "None":
-            total =0
-        return total
+    @property
+    def total_value(self):
+        total = self.cartitems.all().aggregate(Sum('total_price'))
+        # print(type(str(total)))
+        # print(type(total['total_price__sum']))
+        if total['total_price__sum'] == None:
+            return 0
+        return total['total_price__sum']
 
-
+    @property
     def all_items(self):
         return self.cartitems.all()
+
+    
 
 
 class CartItems(TimeStampedModel):

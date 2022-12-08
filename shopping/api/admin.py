@@ -41,7 +41,7 @@ class WishListAdmin(admin.ModelAdmin):
 
 @admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
-    list_display = ['id', 'user']
+    list_display = ['id', 'user', 'cart_items_count', 'total_value']
 
 @admin.register(CartItems)
 class CartItemAdmin(admin.ModelAdmin):
