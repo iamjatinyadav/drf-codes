@@ -46,3 +46,8 @@ class CartAdmin(admin.ModelAdmin):
 @admin.register(CartItems)
 class CartItemAdmin(admin.ModelAdmin):
     list_display = ['id', 'cart', 'product', 'count', 'total_price']
+
+
+@admin.register(Address)
+class AddressAdmin(admin.ModelAdmin):
+    list_display = ['id', 'firstname', 'addressline1', 'country', 'zipcode', 'default_address']

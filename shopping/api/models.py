@@ -3,6 +3,8 @@ from django_extensions.db.models import TimeStampedModel, AutoSlugField
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import User
 from django.db.models import Sum
+from django_countries.fields import CountryField
+from django.db.models import Q
 
 # Create your models here.
 
@@ -163,3 +165,43 @@ class CartItems(TimeStampedModel):
 
         self.total_price = self.count * self.product.discount_price
         super(CartItems, self).save(*args, **kwargs)
+
+
+class Address(TimeStampedModel):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="useraddress")
+    firstname = models.CharField(max_length=200)
+    lastname = models.CharField(max_length=200)
+    email = models.EmailField(max_length=50)
+    mobileno = models.CharField(max_length=13)
+    addressline1 = models.CharField(max_length=50)
+    addressline2 = models.CharField(max_length=50, null=True, blank=True)
+    country = CountryField()
+    city = models.CharField(max_length=50)
+    state = models.CharField(max_length=50)
+    zipcode = models.IntegerField()
+    default_address = models.BooleanField(default=False)
+
+
+    class Meta:
+        # constraints = [
+        #     models.UniqueConstraint(
+        #         fields=['user'],
+        #         condition=Q(default_address=True),
+        #         name='unique_default_address_per_user'
+        #     )
+        # ]
+        db_table = 'Address'
+        managed = True
+        verbose_name = 'Address'
+        verbose_name_plural = 'Addresss'
+
+
+    def __str__(self) -> str:
+        return self.firstname
+
+    
+    def save(self, *args, **kwargs):
+        if self.default_address:
+            self.__class__._default_manager.filter(user = self.user.id, default_address=True).update(default_address=False)
+        super().save(*args, **kwargs)
+
