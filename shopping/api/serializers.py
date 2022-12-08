@@ -97,10 +97,22 @@ class WishlistReadSerializers(serializers.ModelSerializer):
         depth = 1
 
 
+class CartSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = Cart
+        fields = "__all__"
+
+
 class CartItemsSerializers(serializers.ModelSerializer):
+    cart = serializers.PrimaryKeyRelatedField(read_only=True)
     class Meta:
         model = CartItems
         fields = ('id', 'cart', 'product', 'count')
 
 
+class CartItemsRetriveSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = CartItems
+        fields = ('id', 'product', 'count')
+        depth = 1
 

@@ -141,7 +141,7 @@ class Cart(TimeStampedModel):
 class CartItems(TimeStampedModel):
     cart = models.ForeignKey('Cart', on_delete=models.CASCADE, related_name='cartitems')
     product = models.ForeignKey('Product', on_delete=models.SET_NULL, null=True, blank=True, related_name='cartproducts')
-    count = models.IntegerField()
+    count = models.IntegerField(default=1)
     total_price = models.FloatField(max_length=255, null=True, blank=True)
 
     class Meta:

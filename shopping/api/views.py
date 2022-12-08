@@ -11,6 +11,7 @@ from rest_framework import filters
 from api.filters import PriceFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.settings import api_settings
 
 # Create your views here.
 
@@ -149,4 +150,38 @@ class CartViewSets(viewsets.ModelViewSet):
     queryset = CartItems.objects.all()
     serializer_class = CartItemsSerializers
     permission_classes = [IsAuthenticated]
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        username = self.request.user.id
+        queryset=queryset.filter(cart= username)
+        if queryset:
+            serializer = self.get_serializer(queryset, many=True, context={'request':request})
+            return Response(serializer.data)
+        else:
+            return Response(status=HTTP_404_NOT_FOUND)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        product=serializer.validated_data['product']
+        cartitem = CartItems.objects.filter(product = product)
+        if cartitem:
+            for i in cartitem:
+                i.count += serializer.validated_data['count']
+                i.save()
+        else:
+            self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=HTTP_201_CREATED, headers=headers)
+
+
+    def perform_create(self, serializer):
+        cart = Cart.objects.get(user = self.request.user)
+        serializer.save(cart=cart)
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = CartItemsRetriveSerializers(instance,context={'request':request})
+        return Response(serializer.data)
     
