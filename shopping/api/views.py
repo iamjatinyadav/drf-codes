@@ -11,7 +11,6 @@ from rest_framework import filters
 from api.filters import PriceFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.settings import api_settings
 
 # Create your views here.
 
@@ -22,16 +21,32 @@ class ProductListView(viewsets.ReadOnlyModelViewSet):
     filter_backends = [filters.SearchFilter, DjangoFilterBackend, filters.OrderingFilter]
     filterset_class = PriceFilter
     search_fields = ['name']
-    filterset_fields = ['discount_price']
+    filterset_fields = ['discount_price',]
 
     ordering_fields = ('discount_price',)
 
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return ProductsSerializers
+        # if self.action == 'recent_product':
+        #     recent_post = Product.objects.order_by('-id')[:5]
+        #     serializer= self.serializer_class(recent_post, many=True, context={'request': request})
+        #     return Response(serializer.data)
 
-    def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializers = ProductsSerializers(instance, context={'request':request})
-        # print(serializers.data['category'])
-        return Response(serializers.data)
+        return self.serializer_class
+
+    # def get_queryset(self):
+    #     queryset = Product.objects.all()[:5]
+
+
+
+
+
+    # def retrieve(self, request, *args, **kwargs):
+    #     instance = self.get_object()
+    #     serializers = ProductsSerializers(instance, context={'request':request})
+    #     # print(serializers.data['category'])
+    #     return Response(serializers.data)
     
 
     @action(detail=False, methods=["GET",], url_path="recent-product")
