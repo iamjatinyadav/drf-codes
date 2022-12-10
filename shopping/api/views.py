@@ -19,7 +19,7 @@ class ProductListView(viewsets.ReadOnlyModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ReadProductsSerializers
     filter_backends = [filters.SearchFilter, DjangoFilterBackend, filters.OrderingFilter]
-    filterset_class = PriceFilter
+    filterset_class = PriceFilter,
     search_fields = ['name']
     filterset_fields = ['discount_price',]
 
@@ -92,10 +92,8 @@ class CategoryListView(viewsets.ReadOnlyModelViewSet):
     queryset = ProductCategorys.objects.all()
     serializer_class = CategorySerializers
 
-class ContactPostViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
-    pass
 
-class ContactPostView(ContactPostViewSet):
+class ContactPostView(mixins.CreateModelMixin, viewsets.GenericViewSet):
     queryset = Contact.objects.all()
     serializer_class = ContactSerializers
     permission_classes = [IsAuthenticated]
@@ -180,3 +178,4 @@ class CartViewSets(viewsets.ModelViewSet):
         serializer = CartItemsRetriveSerializers(instance,context={'request':request})
         return Response(serializer.data)
     
+
