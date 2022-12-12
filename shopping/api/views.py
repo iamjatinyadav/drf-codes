@@ -19,11 +19,11 @@ class ProductListView(viewsets.ReadOnlyModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ReadProductsSerializers
     filter_backends = [filters.SearchFilter, DjangoFilterBackend, filters.OrderingFilter]
-    filterset_class = PriceFilter,
+    filterset_class = PriceFilter
     search_fields = ['name']
     filterset_fields = ['discount_price',]
 
-    ordering_fields = ('discount_price',)
+    ordering_fields = ('discount_price','id')
 
     def get_serializer_class(self):
         if self.action == 'retrieve':
@@ -49,42 +49,42 @@ class ProductListView(viewsets.ReadOnlyModelViewSet):
     #     return Response(serializers.data)
     
 
-    @action(detail=False, methods=["GET",], url_path="recent-product")
-    def recent_product(self, request):
-        recent_post = Product.objects.order_by('-id')[:5]
-        serializer = ReadProductsSerializers(recent_post, many=True, context={'request': request})
-        return Response(serializer.data)
+    # @action(detail=False, methods=["GET",], url_path="recent-product")
+    # def recent_product(self, request):
+    #     recent_post = Product.objects.order_by('-id')[:5]
+    #     serializer = ReadProductsSerializers(recent_post, many=True, context={'request': request})
+    #     return Response(serializer.data)
 
 
-    @action(detail=False, methods=["GET"], url_path="cheap-product")
-    def cheap_product(self,request):
-        post = Product.objects.order_by('discount_price')[:6]
-        serializer = ReadProductsSerializers(post, many=True, context = {'request': request})
-        return Response(serializer.data)
+    # @action(detail=False, methods=["GET"], url_path="cheap-product")
+    # def cheap_product(self,request):
+    #     post = Product.objects.order_by('discount_price')[:6]
+    #     serializer = ReadProductsSerializers(post, many=True, context = {'request': request})
+    #     return Response(serializer.data)
     
 
-    @action(detail=False, methods=["GET"], url_path="cheap-product/(?P<pk>\d+)")
-    def cheap_product_detail(self,request, pk=None):
-        id = int(self.kwargs['pk'])
-        post = list(Product.objects.order_by('discount_price')[:6].values_list("id", flat=True))
-        if id in post:
-            post = Product.objects.get(pk=id)
-            serializer = ProductsSerializers(post, context = {'request': request})
-            return Response(serializer.data)
-        else:
-            return Response(status=HTTP_404_NOT_FOUND)
+    # @action(detail=False, methods=["GET"], url_path="cheap-product/(?P<pk>\d+)")
+    # def cheap_product_detail(self,request, pk=None):
+    #     id = int(self.kwargs['pk'])
+    #     post = list(Product.objects.order_by('discount_price')[:6].values_list("id", flat=True))
+    #     if id in post:
+    #         post = Product.objects.get(pk=id)
+    #         serializer = ProductsSerializers(post, context = {'request': request})
+    #         return Response(serializer.data)
+    #     else:
+    #         return Response(status=HTTP_404_NOT_FOUND)
 
 
-    @action(detail=False, methods=["GET"], url_path="recent-product/(?P<pk>\d+)")
-    def recent_product_detail(self,request, pk=None):
-        id = int(self.kwargs['pk'])
-        post = list(Product.objects.order_by('-id')[:6].values_list("id", flat=True))
-        if id in post:
-            post = Product.objects.get(pk=id)
-            serializer = ProductsSerializers(post, context = {'request': request})
-            return Response(serializer.data)
-        else:
-            return Response(status=HTTP_404_NOT_FOUND)
+    # @action(detail=False, methods=["GET"], url_path="recent-product/(?P<pk>\d+)")
+    # def recent_product_detail(self,request, pk=None):
+    #     id = int(self.kwargs['pk'])
+    #     post = list(Product.objects.order_by('-id')[:6].values_list("id", flat=True))
+    #     if id in post:
+    #         post = Product.objects.get(pk=id)
+    #         serializer = ProductsSerializers(post, context = {'request': request})
+    #         return Response(serializer.data)
+    #     else:
+    #         return Response(status=HTTP_404_NOT_FOUND)
     
 
 
