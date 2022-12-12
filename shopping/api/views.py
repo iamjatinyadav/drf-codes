@@ -179,3 +179,7 @@ class CartViewSets(viewsets.ModelViewSet):
         return Response(serializer.data)
     
 
+class RegisterView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    # permission_classes = (AllowAny,)
+    serializer_class = RegisterSerializer

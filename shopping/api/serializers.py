@@ -13,7 +13,29 @@ class ReadProductsSerializers(serializers.ModelSerializer):
     def get_product_count(self, obj):
         return obj.products.count()
 
-   
+
+class RegisterSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(required=True, validators=[UniqueValidator(queryset=User.objects.all())])
+
+    password = serializers.CharField(style={'input_type': 'password'},write_only=True, required=True )
+    password2 = serializers.CharField(style={'input_type': 'password'},write_only=True, required=True)
+
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'email', 'password', 'password2')
+        extra_kwargs = {'password': {'write_only': True}}
+
+    def validate(self, attrs):
+        if attrs['password'] != attrs['password2']:
+            raise serializers.ValidationError({"password": "password field didn't match"})
+        return attrs
+
+    def create(self, vaildate_data):
+        user = User.objects.create(username=vaildate_data['username'], email=vaildate_data['email'])
+        user.set_password(vaildate_data['password'])
+        user.is_active = True
+        user.save()
+        return user
 
 
 
