@@ -183,3 +183,19 @@ class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     # permission_classes = (AllowAny,)
     serializer_class = RegisterSerializer
+
+
+class AddressViewSets(viewsets.ModelViewSet):
+    queryset = Address.objects.all()
+    serializer_class = AddressSerializers
+
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        username = self.request.user.id
+        queryset=queryset.filter(user= username)
+        if queryset:
+            serializer = AddressReadSerializers(queryset, many=True, context={'request':request})
+            return Response(serializer.data)
+        else:
+            return Response(status=HTTP_404_NOT_FOUND)

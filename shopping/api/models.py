@@ -200,8 +200,8 @@ class Address(TimeStampedModel):
         return self.firstname
 
     
-    # def save(self, *args, **kwargs):
-    #     if self.default_address:
-    #         self.__class__._default_manager.filter(user = self.user.id, default_address=True).update(default_address=False)
-    #     super().save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        if self.default_address:
+            self.__class__._default_manager.filter(user = self.user.id, default_address=True).update(user =self.user.id , default_address=False)
+        super().save(*args, **kwargs)
 

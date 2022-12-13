@@ -140,3 +140,17 @@ class CartItemsRetriveSerializers(serializers.ModelSerializer):
         fields = ('id', 'product', 'count')
         depth = 1
 
+
+class AddressSerializers(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    class Meta:
+        model = Address
+        fields = "__all__"
+
+
+class AddressReadSerializers(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(read_only=True)
+    class Meta:
+        model = Address
+        fields = "__all__"
+

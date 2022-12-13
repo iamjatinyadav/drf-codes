@@ -50,4 +50,4 @@ class CartItemAdmin(admin.ModelAdmin):
 
 @admin.register(Address)
 class AddressAdmin(admin.ModelAdmin):
-    list_display = ['id', 'firstname', 'addressline1', 'country', 'zipcode', 'default_address']
+    list_display = ['id','user', 'firstname', 'addressline1', 'country', 'zipcode', 'default_address']
