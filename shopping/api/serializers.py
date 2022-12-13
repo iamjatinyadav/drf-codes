@@ -154,3 +154,9 @@ class AddressReadSerializers(serializers.ModelSerializer):
         model = Address
         fields = "__all__"
 
+
+class CheckoutSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Checkout
+        fields = "__all__"
+

@@ -19,6 +19,8 @@ router.register('newsletter', NewsletterViewSet)
 router.register('wishlist', WishlistViewSet)
 router.register('cart', CartViewSets)
 router.register('address', AddressViewSets)
+router.register('checkout', CheckoutViewSet)
+
 urlpatterns = [
     # path('product/', ProductListView.as_view()),
     # path('recent/', ProductRecentView.as_view()),

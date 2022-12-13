@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.db.models import Sum
 from django_countries.fields import CountryField
 from django.db.models import Q
-
+from .choices import *
 # Create your models here.
 
 class ProductCategorys(models.Model):
@@ -197,11 +197,30 @@ class Address(TimeStampedModel):
 
 
     def __str__(self) -> str:
-        return self.firstname
+        return str(self.id)
 
     
     def save(self, *args, **kwargs):
         if self.default_address:
             self.__class__._default_manager.filter(user = self.user.id, default_address=True).update(user =self.user.id , default_address=False)
         super().save(*args, **kwargs)
+
+
+
+class Checkout(TimeStampedModel):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='checkout')
+    address = models.ForeignKey('Address', on_delete=models.CASCADE, related_name='checkout', null=True)
+    payment = models.IntegerField(choices=Payment_choices.choices,default=Payment_choices.Paypal)
+    product = models.JSONField()
+    total = models.FloatField(default=0) 
+
+
+    class Meta:
+        db_table = 'Checkout'
+        managed = True
+        verbose_name = 'Checkout'
+        verbose_name_plural = 'Checkouts'
+
+    def __str__(self) -> str:
+        return self.user.username +" spend "+ self.total
 

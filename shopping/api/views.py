@@ -188,6 +188,8 @@ class RegisterView(generics.CreateAPIView):
 class AddressViewSets(viewsets.ModelViewSet):
     queryset = Address.objects.all()
     serializer_class = AddressSerializers
+    permission_classes = [IsAuthenticated]
+
 
 
     def list(self, request, *args, **kwargs):
@@ -199,3 +201,11 @@ class AddressViewSets(viewsets.ModelViewSet):
             return Response(serializer.data)
         else:
             return Response(status=HTTP_404_NOT_FOUND)
+
+
+
+class CheckoutViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
+    queryset = Checkout.objects.all()
+    serializer_class = CheckoutSerializer
+    permission_classes = [IsAuthenticated]
+    pagination_class = None
