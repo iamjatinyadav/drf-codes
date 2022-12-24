@@ -45,6 +45,10 @@ class Product(TimeStampedModel):
     @property
     def get_product_review(self):
         return self.reviews.all()
+    
+
+    def detail(self):
+        return {"id":self.id, "name":self.name, "price": self.discount_price, "slug": self.slug}
 
 class Contact(TimeStampedModel):
     name = models.CharField(max_length=100)

@@ -160,3 +160,8 @@ class CheckoutSerializer(serializers.ModelSerializer):
         model = Checkout
         fields = "__all__"
 
+
+class UniqueSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = "__all__"

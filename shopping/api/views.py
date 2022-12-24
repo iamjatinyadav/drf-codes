@@ -3,6 +3,7 @@ from .models import *
 from .serializers import *
 from rest_framework import generics, mixins
 from rest_framework.response import Response
+from django.http import JsonResponse
 from rest_framework.decorators import action
 from rest_framework import viewsets
 from rest_framework.views import APIView
@@ -11,7 +12,7 @@ from rest_framework import filters
 from api.filters import PriceFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import IsAuthenticated
-
+from rest_framework.decorators import api_view
 # Create your views here.
 
 class ProductListView(viewsets.ReadOnlyModelViewSet):
@@ -204,8 +205,25 @@ class AddressViewSets(viewsets.ModelViewSet):
 
 
 
-class CheckoutViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
+class CheckoutViewSet(generics.ListCreateAPIView, viewsets.GenericViewSet):
     queryset = Checkout.objects.all()
     serializer_class = CheckoutSerializer
     permission_classes = [IsAuthenticated]
     pagination_class = None
+
+
+
+
+@api_view(['GET'])
+def last_five(request):
+
+    if request.method == 'GET':
+        queryset = Product.objects.order_by("-id")[:5]
+        Data = []
+        for i in queryset:
+            Data.append(i.detail())
+        return Response(Data)
+        # serializer = UniqueSerializer(queryset, many=True)
+
+        # return Response(serializer.data)
+
