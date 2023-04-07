@@ -24,9 +24,12 @@ class ProductCategorys(models.Model):
     @property
     def get_all_product(self):
         return self.products.all()
+    
+    def detail(self):
+        return {"name": self.name}
 
 class Product(TimeStampedModel):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, db_index=True)
     original_price = models.FloatField(max_length=100)
     discount_price = models.FloatField(max_length=100)
     image = models.FileField(upload_to="products_image/", max_length=100)
@@ -48,7 +51,7 @@ class Product(TimeStampedModel):
     
 
     def detail(self):
-        return {"id":self.id, "name":self.name, "price": self.discount_price, "slug": self.slug}
+        return {"id":self.id, "name":self.name, "price": self.discount_price, "slug": self.slug, "category": self.category.detail()}
 
 class Contact(TimeStampedModel):
     name = models.CharField(max_length=100)
@@ -227,4 +230,7 @@ class Checkout(TimeStampedModel):
 
     def __str__(self) -> str:
         return self.user.username +" spend "+ self.total
+
+
+    
 
